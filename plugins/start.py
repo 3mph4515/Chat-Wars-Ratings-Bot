@@ -1,6 +1,10 @@
 import re
 
+import time
+
 from config import *
+
+FORWARD_EXPIRE_TIME_IN_SECONDS = 120
 
 
 @bot.message_handler(commands=['start'])
@@ -24,7 +28,11 @@ def command_start(m):
 
 @bot.message_handler(content_types=["text"])
 def repeat_all_messages(message):
-    if is_forward_from_cw(message):
+    if is_forward_from_cw(message) and "Топ игроков:" in message.text:
+        current_millis = int(round(time.time()))
+        if current_millis - message.forward_date > FORWARD_EXPIRE_TIME_IN_SECONDS:
+            bot.send_message(message.chat.id, "Форвард устарел. Пришли актуальный")
+            return None
         top_text = str(message.text)
         top_text = top_text[top_text.find("#"):].replace("...\n", "")
         for char in trash_symbols:
@@ -41,4 +49,4 @@ def repeat_all_messages(message):
             update_rating(name, position, flags[fraction])
         bot.send_message(message.chat.id, "Спасибо. Теперь можешь посмотреть общий рейтинг по /top")
     else:
-        bot.send_message(message.chat.id, "Принимаем только форварды из @ChatWarsBot")
+        bot.send_message(message.chat.id, "Принимаем только форварды /top из @ChatWarsBot")
