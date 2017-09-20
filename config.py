@@ -111,12 +111,15 @@ def get_rating(chat_id):
             xp = i['xp']
         text_to_send += '{:5}'.format(i['position']) + "  " + get_flag(i['fraction']) + "  " + i['name'] \
                         + "  " + format(level) + "  " + format(xp) + "  " + format(update_time) + "\n"
-    if len(text_to_send) > 3000:
-        splitted_text = util.split_string(text_to_send, 3000)
-        for text in splitted_text:
-            bot.send_message(chat_id, text)
-    else:
-        bot.send_message(chat_id, text_to_send)
+    try:
+        if len(text_to_send) > 3000:
+            splitted_text = util.split_string(text_to_send, 3000)
+            for text in splitted_text:
+                bot.send_message(chat_id, text)
+        else:
+            bot.send_message(chat_id, text_to_send)
+    except Exception:
+        print("Exception")
 
 
 def get_flag(value):
