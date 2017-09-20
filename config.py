@@ -115,7 +115,7 @@ def get_rating(chat_id):
         if int(i['xp']) > 0:
             xp = i['xp']
         text_to_send += '{:5}'.format(i['position']) + "  " + get_flag(i['fraction']) + "  " + i['name'] \
-                        + "  " + format(level) + "  " + format(xp) + "  " + format(update_time) + "\n"
+                        + "  " + format(level) + "  " + format(xp) + "\n"
     try:
         if len(text_to_send) > 4999:
             splitted_text = util.split_string(text_to_send, 4999)
