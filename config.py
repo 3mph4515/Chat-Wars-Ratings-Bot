@@ -5,6 +5,7 @@ from telebot import util
 
 import botan
 import secret
+import time
 
 token = secret.bot_token
 botan_token = secret.botan_token
@@ -120,6 +121,7 @@ def get_rating(chat_id):
             splitted_text = util.split_string(text_to_send, 4000)
             for text in splitted_text:
                 bot.send_message(chat_id, text)
+                time.sleep(0.5)
         else:
             bot.send_message(chat_id, text_to_send)
         bot.send_message(chat_id, "\nВсего красных: " + format(
