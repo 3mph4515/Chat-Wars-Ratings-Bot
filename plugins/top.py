@@ -42,4 +42,7 @@ def handle_top_forward(message):
         except Exception:
             print("Exception")
     else:
-        bot.send_message(message.chat.id, "Принимаем только форварды /top из @ChatWarsBot")
+        try:
+            bot.send_message(message.chat.id, "Принимаем только форварды /top из @ChatWarsBot")
+        except Exception:
+            print("Exception")
