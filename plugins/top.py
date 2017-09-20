@@ -33,6 +33,9 @@ def handle_top_forward(message):
             fraction = ''.join(fraction).strip("-, ")
             name = name.replace(fraction, "")
             update_rating(name, position, flags[fraction], current_millis, level, xp)
-        bot.send_message(message.chat.id, "Спасибо. Теперь можешь посмотреть общий рейтинг по /top")
+        try:
+            bot.send_message(message.chat.id, "Спасибо. Теперь можешь посмотреть общий рейтинг по /top")
+        except Exception:
+            print("Exception")
     else:
         bot.send_message(message.chat.id, "Принимаем только форварды /top из @ChatWarsBot")
