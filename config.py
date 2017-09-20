@@ -1,5 +1,7 @@
+import datetime
 import telebot
 from pymongo import MongoClient
+from telebot import util
 
 import botan
 import secret
@@ -51,14 +53,18 @@ def register_user(cid, name, first_name, last_name):
     })
 
 
-def update_rating(name, position, fraction):
+def update_rating(name, position, fraction, time, level, xp):
     if db_rating.rating.find_one({"position": position}) is not None:
         db_rating.rating.update_one({
             "position": position
         }, {
             '$set': {
                 "fraction": str(fraction),
-                "name": str(name)}
+                "name": str(name),
+                "update_time": time,
+                "level": level,
+                "xp": xp
+            }
         }, upsert=False)
     elif db_rating.rating.find_one({"name": name}) is not None:
         print("Already exists")
@@ -67,30 +73,54 @@ def update_rating(name, position, fraction):
         }, {
             '$set': {
                 "fraction": str(fraction),
-                "position": position}
+                "position": position,
+                "update_time": time,
+                "level": level,
+                "xp": xp}
         }, upsert=False)
     else:
         db_rating.rating.insert_one({
             "name": str(name),
             "fraction": str(fraction),
             "position": position,
+            "update_time": time,
+            "level": level,
+            "xp": xp
         })
 
 
 def get_rating(chat_id):
     arr = []
-    for document in db_rating.rating.find({}):
-        print(document)
-        name, fraction, position = document['name'], document['fraction'], document['position']
-        arr.append({'name': name, 'fraction': fraction, 'position': int(position)})
-        # bot.send_message(chat_id, "")
+    for i in db_rating.rating.find({}):
+        print(i)
+        name, fraction, position = i['name'], i['fraction'], i['position']
+        update_time = i.get('update_time', 0)
+        level = i.get('level', 0)
+        xp = i.get('xp', 0)
+        arr.append({'name': name, 'fraction': fraction, 'position': int(position),
+                    'update_time': int(update_time), 'level': int(level), 'xp': int(xp), })
     arr = sorted(arr, key=lambda pos: pos['position'], reverse=False)
     print(str(arr))
-    res = "Top:\n"
+    text_to_send = "Текущий топ игроков:\n"
     for i in arr:
-        res += '%5s' % str(i['position']) + " " + get_flag_by_value(i['fraction']) + " " + str(i['name']) + "\n"
-    bot.send_message(chat_id, res)
+        update_time = ""
+        level = ""
+        xp = ""
+        if int(i['update_time']) > 0:
+            update_time = datetime.datetime.fromtimestamp(int(i['update_time'])).strftime('%b, %d %H:%M')
+        if int(i['level']) > 0:
+            level = i['level']
+        if int(i['xp']) > 0:
+            xp = i['xp']
+        text_to_send += '{:5}'.format(i['position']) + "  " + get_flag(i['fraction']) + "  " + i['name'] \
+                        + "  " + format(level) + "  " + format(xp) + "  " + format(update_time) + "\n"
+    if len(text_to_send) > 3000:
+        splitted_text = util.split_string(text_to_send, 3000)
+        for text in splitted_text:
+            bot.send_message(chat_id, text)
+    else:
+        bot.send_message(chat_id, text_to_send)
 
 
-def get_flag_by_value(value):
+def get_flag(value):
     return list(flags.keys())[list(flags.values()).index(value)]
