@@ -98,10 +98,11 @@ def get_rating(chat_id):
         level = i.get('level', 0)
         xp = i.get('xp', 0)
         count_table[fraction] += 1
-        arr.append({'name': name, 'fraction': fraction, 'position': int(position),
-                    'update_time': int(update_time), 'level': int(level), 'xp': int(xp), })
+        if level >= 41:
+            arr.append({'name': name, 'fraction': fraction, 'position': int(position),
+                        'update_time': int(update_time), 'level': int(level), 'xp': int(xp), })
     arr = sorted(arr, key=lambda pos: pos['position'], reverse=False)
-    text_to_send = "Текущий топ игроков:\n"
+    text_to_send = "Текущий топ игроков:(Временно урезано до минимального уровня 40)\n"
     for i in arr:
         update_time = ""
         level = ""
@@ -115,8 +116,8 @@ def get_rating(chat_id):
         text_to_send += '{:5}'.format(i['position']) + "  " + get_flag(i['fraction']) + "  " + i['name'] \
                         + "  " + format(level) + "  " + format(xp) + "  " + format(update_time) + "\n"
     try:
-        if len(text_to_send) > 3000:
-            splitted_text = util.split_string(text_to_send, 3000)
+        if len(text_to_send) > 4000:
+            splitted_text = util.split_string(text_to_send, 4000)
             for text in splitted_text:
                 bot.send_message(chat_id, text)
         else:
