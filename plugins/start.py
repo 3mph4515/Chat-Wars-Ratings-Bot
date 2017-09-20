@@ -9,7 +9,14 @@ def command_start(m):
     first_name = m.chat.first_name
     last_name = m.chat.last_name
     if is_registered(cid):
-        bot.reply_to(m, "Пришли мне форвард /top из @ChatWarsBot")
+        try:
+            bot.reply_to(m, "Пришли мне форвард /top из @ChatWarsBot")
+        except Exception:
+            print("Exception")
     else:
-        register_user(cid, username, first_name, last_name)
-        bot.reply_to(m, "Привет!\nМы собираем топ всех игроков игры ChatWars.\nПришли мне форвард /top из @ChatWarsBot")
+        try:
+            register_user(cid, username, first_name, last_name)
+            bot.reply_to(m,
+                         "Привет!\nМы собираем топ всех игроков игры ChatWars.\nПришли мне форвард /top из @ChatWarsBot")
+        except Exception:
+            print("Exception")
