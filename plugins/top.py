@@ -32,7 +32,11 @@ def handle_top_forward(message):
             fraction = re.findall(r'[^\w\s,]', name)
             fraction = ''.join(fraction).strip("-, ")
             name = name.replace(fraction, "")
-            update_rating(name, position, flags[fraction], current_millis, level, xp)
+            if fraction in flags:
+                flag = flags[fraction]
+            else:
+                flag = 'blue'
+            update_rating(name, position, flag, current_millis, level, xp)
         try:
             bot.send_message(message.chat.id, "Спасибо. Теперь можешь посмотреть общий рейтинг по /top")
         except Exception:
