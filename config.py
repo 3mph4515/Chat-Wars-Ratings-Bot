@@ -117,8 +117,8 @@ def get_rating(chat_id):
         text_to_send += '{:5}'.format(i['position']) + "  " + get_flag(i['fraction']) + "  " + i['name'] \
                         + "  " + format(level) + "  " + format(xp) + "  " + format(update_time) + "\n"
     try:
-        if len(text_to_send) > 4000:
-            splitted_text = util.split_string(text_to_send, 4000)
+        if len(text_to_send) > 4999:
+            splitted_text = util.split_string(text_to_send, 4999)
             for text in splitted_text:
                 bot.send_message(chat_id, text)
                 time.sleep(0.5)
