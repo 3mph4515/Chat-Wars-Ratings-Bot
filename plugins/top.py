@@ -35,7 +35,7 @@ def handle_top_forward(message):
             if fraction in flags:
                 flag = flags[fraction]
             else:
-                flag = 'blue'
+                flag = 'deleted'
             update_rating(name, position, flag, current_millis, level, xp)
         try:
             bot.send_message(message.chat.id, "Спасибо. Теперь можешь посмотреть общий рейтинг по /top")

@@ -24,6 +24,7 @@ flags = {
     '🇨🇾': 'white',
     '🇰🇮': 'twilight',
     '🇲🇴': 'mint',
+    '❌': 'deleted'
 }
 
 
@@ -90,11 +91,13 @@ def update_rating(name, position, fraction, time, level, xp):
 
 def get_rating(chat_id):
     arr = []
+    count_table = {'red': 0, 'blue': 0, 'mint': 0, 'twilight': 0, 'deleted': 0, 'black': 0, 'white': 0, 'yellow': 0}
     for i in db_rating.rating.find({}):
         name, fraction, position = i['name'], i['fraction'], i['position']
         update_time = i.get('update_time', 0)
         level = i.get('level', 0)
         xp = i.get('xp', 0)
+        count_table[fraction] += 1
         arr.append({'name': name, 'fraction': fraction, 'position': int(position),
                     'update_time': int(update_time), 'level': int(level), 'xp': int(xp), })
     arr = sorted(arr, key=lambda pos: pos['position'], reverse=False)
@@ -118,6 +121,16 @@ def get_rating(chat_id):
                 bot.send_message(chat_id, text)
         else:
             bot.send_message(chat_id, text_to_send)
+        bot.send_message(chat_id, "\nВсего красных: " + format(
+            count_table['red']) + "\nВсего синих: " + format(
+            count_table['blue']) + "\nВсего желтых: " + format(
+            count_table['yellow']) + "\nВсего черных: " + format(
+            count_table['black']) + "\nВсего мятных: " + format(
+            count_table['mint']) + "\nВсего сумрачных: " + format(
+            count_table['twilight']) + "\nВсего белых: " + format(
+            count_table['white']) + "\nВсего забанено: " + format(
+            count_table['deleted']))
+
     except Exception as e:
         print(e)
 
