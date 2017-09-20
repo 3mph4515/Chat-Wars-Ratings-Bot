@@ -39,10 +39,10 @@ def handle_top_forward(message):
             update_rating(name, position, flag, current_millis, level, xp)
         try:
             bot.send_message(message.chat.id, "Спасибо. Теперь можешь посмотреть общий рейтинг по /top")
-        except Exception:
-            print("Exception")
+        except Exception as e:
+            print(e)
     else:
         try:
             bot.send_message(message.chat.id, "Принимаем только форварды /top из @ChatWarsBot")
-        except Exception:
-            print("Exception")
+        except Exception as e:
+            print(e)

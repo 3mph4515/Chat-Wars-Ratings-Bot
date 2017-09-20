@@ -118,8 +118,8 @@ def get_rating(chat_id):
                 bot.send_message(chat_id, text)
         else:
             bot.send_message(chat_id, text_to_send)
-    except Exception:
-        print("Exception")
+    except Exception as e:
+        print(e)
 
 
 def get_flag(value):

@@ -11,12 +11,12 @@ def command_start(m):
     if is_registered(cid):
         try:
             bot.reply_to(m, "Пришли мне форвард /top из @ChatWarsBot")
-        except Exception:
-            print("Exception")
+        except Exception as e:
+            print(e)
     else:
         try:
             register_user(cid, username, first_name, last_name)
             bot.reply_to(m,
                          "Привет!\nМы собираем топ всех игроков игры ChatWars.\nПришли мне форвард /top из @ChatWarsBot")
-        except Exception:
-            print("Exception")
+        except Exception as e:
+            print(e)
