@@ -67,7 +67,6 @@ def update_rating(name, position, fraction, time, level, xp):
             }
         }, upsert=False)
     elif db_rating.rating.find_one({"name": name}) is not None:
-        print("Already exists")
         db_rating.rating.update_one({
             "name": name
         }, {
@@ -92,7 +91,6 @@ def update_rating(name, position, fraction, time, level, xp):
 def get_rating(chat_id):
     arr = []
     for i in db_rating.rating.find({}):
-        print(i)
         name, fraction, position = i['name'], i['fraction'], i['position']
         update_time = i.get('update_time', 0)
         level = i.get('level', 0)
@@ -100,7 +98,6 @@ def get_rating(chat_id):
         arr.append({'name': name, 'fraction': fraction, 'position': int(position),
                     'update_time': int(update_time), 'level': int(level), 'xp': int(xp), })
     arr = sorted(arr, key=lambda pos: pos['position'], reverse=False)
-    print(str(arr))
     text_to_send = "Текущий топ игроков:\n"
     for i in arr:
         update_time = ""

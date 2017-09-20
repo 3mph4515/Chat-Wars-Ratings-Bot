@@ -32,7 +32,6 @@ def handle_top_forward(message):
             fraction = re.findall(r'[^\w\s,]', name)
             fraction = ''.join(fraction).strip("-, ")
             name = name.replace(fraction, "")
-            print(position + name + flags[fraction] + level + xp)
             update_rating(name, position, flags[fraction], current_millis, level, xp)
         bot.send_message(message.chat.id, "Спасибо. Теперь можешь посмотреть общий рейтинг по /top")
     else:
