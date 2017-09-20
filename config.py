@@ -98,7 +98,7 @@ def get_rating(chat_id):
         level = i.get('level', 0)
         xp = i.get('xp', 0)
         count_table[fraction] += 1
-        if level >= 41:
+        if int(level) >= 41:
             arr.append({'name': name, 'fraction': fraction, 'position': int(position),
                         'update_time': int(update_time), 'level': int(level), 'xp': int(xp), })
     arr = sorted(arr, key=lambda pos: pos['position'], reverse=False)
