@@ -6,9 +6,27 @@ from config import *
 FORWARD_EXPIRE_TIME_IN_SECONDS = 120
 
 
-@bot.message_handler(commands=['top'])
+@bot.message_handler(regexp="top(.*)")
 def command_start(m):
-    get_rating(m.chat.id)
+    r_full = re.search("top_(\d+)_(\d+)", str(m.text))
+    r = re.search("top_(\d+)", str(m.text))
+    if r_full:
+        range_from = int(r_full.group(1))
+        range_to = int(r_full.group(2))
+        if range_from > range_to:
+            range_to, range_from = range_from, range_to
+        if range_from < 0 or range_to < 0:
+            send_msg(m.chat.id, "Принимаются только положительные значения")
+            return None
+        get_rating(m.chat.id, range_from, range_to)
+    elif r:
+        range_to = int(r.group(1))
+        if range_to < 0:
+            send_msg(m.chat.id, "Принимаются только положительные значения")
+            return None
+        get_rating(m.chat.id, 1, range_to)
+    else:
+        send_msg(m.chat.id, "Пришли команду в формате /top_от_до.\nВерхняя граница опциональный параметр")
 
 
 @bot.message_handler(content_types=["text"])

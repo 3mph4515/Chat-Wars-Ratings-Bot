@@ -93,7 +93,10 @@ def update_rating(name, position, fraction, update_time, level, xp):
         })
 
 
-def get_rating(chat_id):
+def get_rating(chat_id, range_from, range_to):
+    if range_to - range_from > 500:
+        send_msg(chat_id, "Максимальный интервал для одного запроса - 500")
+        return None
     arr = []
     count_table = {'red': 0, 'blue': 0, 'mint': 0, 'twilight': 0, 'deleted': 0, 'black': 0, 'white': 0, 'yellow': 0}
     for i in db_rating.rating.find({}):
@@ -102,11 +105,11 @@ def get_rating(chat_id):
         level = i.get('level', 0)
         xp = i.get('xp', 0)
         count_table[fraction] += 1
-        if int(level) >= 50:
+        if range_from <= int(position) <= range_to:
             arr.append({'name': name, 'fraction': fraction, 'position': int(position),
                         'update_time': int(update_time), 'level': int(level), 'xp': int(xp), })
     arr = sorted(arr, key=lambda pos: pos['position'], reverse=False)
-    text_to_send = "Текущий топ игроков:(Временно урезано до минимального уровня 40)\n"
+    text_to_send = "Текущий топ игроков:(" + str(range_from) + ' - ' + str(range_to) + ")\n"
     for i in arr:
         update_time = ""
         level = ""
@@ -158,3 +161,10 @@ def remove_duplicates():
                 removed += 1
                 db_rating.rating.delete_one({"_id": j['_id']})
     print("Removed " + str(removed))
+
+
+def send_msg(chat_id, text):
+    try:
+        bot.send_message(chat_id, text)
+    except Exception as e:
+        print(e)
