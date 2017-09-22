@@ -59,7 +59,9 @@ def update_rating(name, position, fraction, update_time, level, xp):
     if db_rating.rating.find_one({"position": position}) is not None:
         dups = db_rating.rating.find({"name": name})
         for dup in dups:
-            db_rating.rating.delete_one({"_id": dup['_id']})
+            # Delete only if this user has another position because otherwise we will update it
+            if dup['position'] != position:
+                db_rating.rating.delete_one({"_id": dup['_id']})
         db_rating.rating.update_one({
             "position": position
         }, {
