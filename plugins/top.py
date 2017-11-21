@@ -41,22 +41,11 @@ def handle_top_forward(message):
         for char in trash_symbols:
             top_text = top_text.replace(char, '')
         slices = top_text.split("\n")
-        for i in slices:
-            r = re.search("(#\s\d+) (.+(?= \d)) (\d+)(/)(\d+)", i)
-            position = r.group(1).strip("#, ")
-            name = r.group(2).strip()
-            level = r.group(3).strip()
-            xp = r.group(5).strip()
-            fraction = re.findall(r'[^\w\s,]', name)
-            fraction = ''.join(fraction).strip("-, ")
-            name = name.replace(fraction, "")
-            if fraction in flags:
-                flag = flags[fraction]
-            else:
-                flag = 'deleted'
-            update_rating(name, position, flag, current_millis, level, xp)
+        for i in slices:            
+            player = parse_player_data(i)
+            update_rating(player['name'], player['position'], player['flag'], current_millis, player['level'], player['xp'])
         try:
-            bot.send_message(message.chat.id, "Спасибо. Теперь можешь посмотреть общий рейтинг по /top")
+            bot.send_message(message.chat.id, "Спасибо. Теперь можешь посмотреть общий рейтинг с помощью команды /top_от_до.\nВерхняя граница опциональный параметр")
         except Exception as e:
             print(e)
     else:
@@ -64,3 +53,20 @@ def handle_top_forward(message):
             bot.send_message(message.chat.id, "Принимаем только форварды /top из @ChatWarsBot")
         except Exception as e:
             print(e)
+
+def parse_player_data(raw_data):        
+    r = re.search("(#\s\d+) (.+(?= \d)) (\d+)(/)(\d+)", raw_data)
+    position = r.group(1).strip("#, ")
+    name = r.group(2).strip()
+    level = r.group(3).strip()
+    xp = r.group(5).strip()
+    fraction = re.findall(r'[^\w\s,]', name)
+    if len(fraction) > 2:
+        fraction = fraction[:2]            
+    fraction = ''.join(fraction).strip("-, ")            
+    name = name.replace(fraction, "")
+    if fraction in flags:
+        flag = flags[fraction]
+    else:
+        flag = 'deleted'
+    return { 'name' : name, 'position': position, 'flag' : flag, 'level' : level, 'xp' : xp }    

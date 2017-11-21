@@ -7,3 +7,9 @@ Display full Chat Wars Rating
 1. Run pip3 install -r requirements.txt
 1. Install and run mongoDB
 1. Run bot via python3 bot.py
+
+# Unit tests:
+Unit tests are located in the /tests directory, to run tests
+```sh
+$ python3 -m unittest <path to file with tests>
+```
