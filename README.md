@@ -1,6 +1,6 @@
 # Chat-Wars-Ratings-Bot
 Display full Chat Wars Rating
-Website running on 178.62.209.183:8080
+Website running on http://chatwarsrating.cf/
 
 # Website repository
 https://github.com/MikalaiSivokha/ChatWarsRatingBotWebApp
