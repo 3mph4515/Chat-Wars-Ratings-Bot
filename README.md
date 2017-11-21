@@ -1,5 +1,9 @@
 # Chat-Wars-Ratings-Bot
 Display full Chat Wars Rating
+Website running on 178.62.209.183:8080
+
+# Website repository
+https://github.com/MikalaiSivokha/ChatWarsRatingBotWebApp
 
 # How to install:
 1. Obtain telegram bot API token from BotFather
