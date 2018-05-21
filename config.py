@@ -9,7 +9,7 @@ import time
 
 token = secret.bot_token
 botan_token = secret.botan_token
-original_cw_bot = 'ChatWarsBot'
+original_cw_bot = 'ChatWarsClassicBot'
 trash_symbols = ['🏅', '👑']
 bot = telebot.TeleBot(token)
 client = MongoClient('localhost:27017')
